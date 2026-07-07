@@ -1,0 +1,2737 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sports Schedule</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive">
+
+<style>
+:root{
+    --bg:#f2f3f5;
+    --panel:#ffffff;
+    --line:#d9dde4;
+    --text:#15171a;
+    --muted:#667085;
+    --dark:#111827;
+    --blue:#0066cc;
+    --red:#d71920;
+    --green:#12805c;
+    --gold:#f5b301;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.topbar{
+    background:#111827;
+    color:#fff;
+    border-bottom:4px solid var(--red);
+}
+
+.topbar-inner{
+    max-width:1500px;
+    margin:auto;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+}
+
+.brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    font-weight:900;
+    font-size:22px;
+    letter-spacing:-.03em;
+}
+
+.brand-badge{
+    background:var(--red);
+    color:#fff;
+    width:42px;
+    height:42px;
+    display:grid;
+    place-items:center;
+    border-radius:4px;
+    font-weight:900;
+}
+
+.topbar-right{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+}
+
+
+.stats{
+    display:flex;
+    gap:10px;
+    font-size:13px;
+}
+
+.stats span{
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.16);
+    padding:8px 10px;
+    border-radius:4px;
+}
+
+.contact-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.contact-btn{
+    border:0;
+    background:#fff;
+    color:#111827;
+    height:34px;
+    padding:0 14px;
+    border-radius:4px;
+    font-weight:900;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.contact-btn:hover{
+    background:#e5e7eb;
+}
+
+.contact-email{
+    display:none;
+    font-size:12px;
+    font-weight:800;
+    color:#fff;
+    background:rgba(255,255,255,.1);
+    border:1px solid rgba(255,255,255,.16);
+    padding:8px 10px;
+    border-radius:4px;
+}
+
+.wrap{
+    max-width:1500px;
+    margin:18px auto;
+    padding:0 14px;
+}
+
+.tools{
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:12px;
+    margin-bottom:16px;
+}
+
+.search{
+    height:46px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    background:#fff;
+    padding:0 12px;
+    font-size:15px;
+    outline:none;
+}
+
+.filters{
+    display:flex;
+    gap:6px;
+    overflow:auto;
+}
+
+.filters button{
+    height:46px;
+    padding:0 12px;
+    border:1px solid var(--line);
+    background:#fff;
+    color:#222;
+    border-radius:4px;
+    font-weight:700;
+    cursor:pointer;
+    white-space:nowrap;
+}
+
+.filters button.active{
+    background:#111827;
+    color:#fff;
+    border-color:#111827;
+}
+
+.date-section{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:5px;
+    overflow:hidden;
+    margin-bottom:16px;
+}
+
+.channel-section{
+    border-color:#f0c14b;
+}
+
+.date-head{
+    background:#111827;
+    color:#fff;
+    padding:10px 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+}
+
+.channel-section .date-head{
+    background:#1f2937;
+    border-bottom:3px solid var(--gold);
+}
+
+.date-head h2{
+    margin:0;
+    font-size:15px;
+    text-transform:uppercase;
+    letter-spacing:.04em;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.date-head span{
+    font-size:12px;
+    color:#d1d5db;
+    white-space:nowrap;
+}
+
+.score-row{
+    display:grid;
+    grid-template-columns:86px 58px 1fr 120px;
+    align-items:center;
+    gap:12px;
+    padding:10px 12px;
+    border-bottom:1px solid var(--line);
+    background:#fff;
+}
+
+.score-row:hover{
+    background:#f8fafc;
+}
+
+.score-row:last-child{
+    border-bottom:0;
+}
+
+.game-time{
+    text-align:center;
+    border-right:1px solid var(--line);
+    padding-right:12px;
+}
+
+.game-time b{
+    display:block;
+    font-size:14px;
+}
+
+.game-time span{
+    display:block;
+    margin-top:4px;
+    color:var(--muted);
+    font-size:11px;
+    text-transform:uppercase;
+}
+
+.league-cell{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-right:1px solid var(--line);
+    padding-right:12px;
+    min-height:38px;
+}
+
+.league-logo{
+    width:36px;
+    height:36px;
+    object-fit:contain;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:50%;
+    padding:3px;
+    flex:0 0 auto;
+}
+
+.league-logo-fallback{
+    width:36px;
+    height:36px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:#e5e7eb;
+    color:#111827;
+    font-size:12px;
+    font-weight:900;
+    border:1px solid var(--line);
+    flex:0 0 auto;
+}
+
+.matchup{
+    display:grid;
+    grid-template-columns:1fr 120px 1fr;
+    align-items:center;
+    gap:10px;
+}
+
+.team{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    min-width:0;
+}
+
+.team.home{
+    justify-content:flex-end;
+    text-align:right;
+}
+
+.team.away{
+    justify-content:flex-start;
+}
+
+.team-name{
+    min-width:0;
+    font-size:14px;
+    font-weight:800;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.logo{
+    width:34px;
+    height:34px;
+    object-fit:contain;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:50%;
+    padding:2px;
+    flex:0 0 auto;
+}
+
+.logo-letter{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    background:#e5e7eb;
+    color:#111827;
+    font-weight:900;
+    border:1px solid var(--line);
+    flex:0 0 auto;
+}
+
+.vs{
+    text-align:center;
+    color:var(--muted);
+    font-size:11px;
+    font-weight:900;
+}
+
+.vs.countdown{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:110px;
+    min-height:34px;
+    padding:6px 8px;
+    border-radius:4px;
+    background:#eef2ff;
+    color:#000;
+    border:1px solid #bfdbfe;
+    font-size:13px;
+    font-weight:900;
+    line-height:1;
+}
+
+.vs.live{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-width:70px;
+    min-height:34px;
+    padding:6px 8px;
+    border-radius:4px;
+    background:#e7f8f1;
+    color:var(--green);
+    border:1px solid #a6e7cd;
+    font-size:13px;
+    font-weight:900;
+    line-height:1;
+}
+
+.actions{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:7px;
+}
+
+.event-channels{
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:5px;
+    flex-wrap:wrap;
+}
+
+.status{
+    font-size:14px;
+    font-weight:900;
+    padding:6px 8px;
+    border-radius:4px;
+    background:#fff4e5;
+    color:#9a5b00;
+    border:1px solid #ffd59a;
+}
+
+.status.live{
+    background:#e7f8f1;
+    color:var(--green);
+    border-color:#a6e7cd;
+}
+
+.status.countdown{
+    background:#eef2ff;
+    color:#000000;
+    border:1px solid #bfdbfe;
+    min-width:120px;
+    text-align:center;
+}
+
+.status.channel{
+    background:#fff7d6;
+    color:#8a5a00;
+    border-color:#f0c14b;
+}
+
+.watch{
+    border:0;
+    background:var(--red);
+    color:#fff;
+    height:34px;
+    padding:0 13px;
+    border-radius:4px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+.watch:hover{
+    background:#b9151b;
+}
+
+.watch:disabled{
+    background:#cbd5e1;
+    cursor:not-allowed;
+}
+
+.stream-number{
+    color:var(--muted);
+    font-size:11px;
+    font-weight:900;
+    line-height:1.05;
+    text-align:center;
+    min-width:30px;
+}
+
+.stream-number b{
+    display:block;
+    color:#344054;
+    font-size:12px;
+}
+
+.stream-number span{
+    display:block;
+    font-size:10px;
+}
+
+.overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.78);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:18px;
+    z-index:999;
+}
+
+.overlay.active{
+    display:flex;
+}
+
+.modal{
+    width:min(1280px,96vw);
+    background:#fff;
+    border-radius:6px;
+    overflow:hidden;
+}
+
+.modal-head{
+    background:#111827;
+    color:#fff;
+    padding:12px 14px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+}
+
+.modal-title-teams{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    min-width:0;
+    flex:1;
+}
+
+.modal-team{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    min-width:0;
+}
+
+.modal-team-name{
+    font-weight:900;
+    max-width:280px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.modal-logo{
+    width:40px;
+    height:40px;
+    object-fit:contain;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:50%;
+    padding:2px;
+}
+
+.modal-letter{
+    width:40px;
+    height:40px;
+    border-radius:50%;
+    background:#e5e7eb;
+    color:#111827;
+    display:grid;
+    place-items:center;
+    font-weight:900;
+    border:1px solid var(--line);
+}
+
+.modal-vs{
+    font-size:12px;
+    font-weight:900;
+    color:#d1d5db;
+}
+
+.close{
+    border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    border-radius:4px;
+    height:34px;
+    padding:0 12px;
+    cursor:pointer;
+}
+
+.modal-body{
+    display:grid;
+    grid-template-columns:1fr 240px;
+    gap:12px;
+    padding:12px;
+}
+
+.player{
+    background:#000;
+    aspect-ratio:16/9;
+}
+
+.player iframe{
+    width:100%;
+    height:100%;
+    border:0;
+    display:block;
+}
+
+.players{
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:10px;
+}
+
+.players h3{
+    margin:0 0 10px;
+    font-size:14px;
+}
+
+.players button{
+    width:100%;
+    height:36px;
+    margin-bottom:7px;
+    border:1px solid var(--line);
+    background:#fff;
+    cursor:pointer;
+    border-radius:4px;
+    font-weight:800;
+}
+
+.players button.active{
+    background:#111827;
+    color:#fff;
+    border-color:#111827;
+}
+
+.iframe-panel{
+    border-top:1px solid var(--line);
+    background:#f8fafc;
+    padding:12px;
+}
+
+.iframe-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:8px;
+}
+
+.iframe-head strong{
+    font-size:13px;
+    text-transform:uppercase;
+}
+
+.copy-iframe{
+    border:0;
+    background:var(--blue);
+    color:#fff;
+    height:32px;
+    padding:0 12px;
+    border-radius:4px;
+    font-weight:900;
+    cursor:pointer;
+}
+
+#iframeCode{
+    width:100%;
+    min-height:78px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:10px;
+    font-family:Consolas, monospace;
+    font-size:12px;
+    resize:vertical;
+    background:#fff;
+}
+
+.empty{
+    background:#fff;
+    border:1px solid var(--line);
+    padding:25px;
+    text-align:center;
+    color:var(--muted);
+}
+
+.toast{
+    position:fixed;
+    left:50%;
+    bottom:20px;
+    transform:translateX(-50%);
+    background:#111827;
+    color:#fff;
+    padding:10px 14px;
+    border-radius:5px;
+    font-size:13px;
+    display:none;
+    z-index:1000;
+}
+
+@media(max-width:900px){
+    .topbar-inner{
+        flex-direction:column;
+        align-items:flex-start;
+    }
+
+    .topbar-right{
+        width:100%;
+        justify-content:space-between;
+    }
+
+    .tools{
+        grid-template-columns:1fr;
+    }
+
+    .score-row{
+        grid-template-columns:70px 46px 1fr;
+        gap:8px;
+    }
+
+    .game-time{
+        text-align:left;
+        border-right:1px solid var(--line);
+        padding-right:8px;
+    }
+
+    .league-cell{
+        padding-right:8px;
+    }
+
+    .league-logo,
+    .league-logo-fallback{
+        width:30px;
+        height:30px;
+    }
+
+    .matchup{
+        grid-template-columns:1fr;
+    }
+
+    .team.home,
+    .team.away{
+        justify-content:flex-start;
+        text-align:left;
+    }
+
+    .vs{
+        text-align:left;
+        padding-left:43px;
+    }
+
+    .vs.countdown,
+    .vs.live{
+        width:max-content;
+        margin-left:43px;
+        padding-left:8px;
+    }
+
+    .actions{
+        grid-column:1 / -1;
+        justify-content:space-between;
+    }
+
+    .modal-body{
+        grid-template-columns:1fr;
+    }
+
+    .modal-title-teams{
+        justify-content:flex-start;
+        flex-wrap:wrap;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+    <div class="topbar-inner">
+        <div class="brand">
+            <div class="brand-badge">HD</div>
+            Sports Schedule
+        </div>
+
+        <div class="topbar-right">
+            <div class="stats">
+                <span>31 Items</span>
+                <span>3 Live</span>
+            </div>
+
+            <div class="contact-box">
+    <button class="contact-btn" id="showEmailBtn" type="button">
+        Contact mail
+    </button>
+
+    <button
+        class="contact-btn"
+        type="button"
+        onclick="window.open('https://embedhd.org/api-event.php','_blank')">
+        Open API
+    </button>
+
+    <span class="contact-email" id="contactEmail">
+        <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="e5b38c9184898c8e84d5d5d2a595978a918a8bcb8880">[email&#160;protected]</a>
+    </span>
+</div>
+        </div>
+    </div>
+</header>
+
+<main class="wrap">
+
+    <div class="tools">
+        <input class="search" id="search" placeholder="Search team, league, channel or event...">
+
+        <div class="filters" id="filters">
+            <button class="active" data-filter="all">All</button>
+            <button data-filter="football">Football</button>
+            <button data-filter="soccer">Soccer</button>
+            <button data-filter="tennis">Tennis</button>
+            <button data-filter="basketball">Basketball</button>
+            <button data-filter="hockey">Hockey</button>
+            <button data-filter="baseball">Baseball</button>
+            <button data-filter="fight">Fight</button>
+            <button data-filter="motor">Motor</button>
+            <button data-filter="other">Other</button>
+        </div>
+    </div>
+
+    
+                        
+            <section class="date-section date-block">
+                <div class="date-head">
+                    <h2>Sun, Jun 14</h2>
+                    <span>3 events</span>
+                </div>
+
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="boston red sox - texas rangers boston red sox texas rangers mlb mlb baseball sun, jun 14"
+                        data-title="Boston Red Sox - Texas Rangers"
+                        data-home="Boston Red Sox"
+                        data-away="Texas Rangers"
+                        data-home-logo="https://embedhd.org/images/team-logos/BostonRedSox.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/TexasRangers.png"
+                        data-start="1781479200"
+                        data-hds="[603]">
+
+                        <div class="game-time">
+                            
+                                                            <b>07:20 PM</b>
+                                <span>Sun, Jun 14</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Boston Red Sox</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/BostonRedSox.png" alt="Boston Red Sox" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs live">LIVE</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/TexasRangers.png" alt="Texas Rangers" loading="lazy">
+                                    
+                                    <div class="team-name">Texas Rangers</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>603</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="fight"
+                        data-search="ufc freedom 250 topuria - gaethje ufc freedom 250 topuria gaethje ufc ufc fight sun, jun 14"
+                        data-title="UFC Freedom 250 Topuria - Gaethje"
+                        data-home="UFC Freedom 250 Topuria"
+                        data-away="Gaethje"
+                        data-home-logo=""
+                        data-away-logo=""
+                        data-start="1781481600"
+                        data-hds="[111,112]">
+
+                        <div class="game-time">
+                            
+                                                            <b>08:00 PM</b>
+                                <span>Sun, Jun 14</span>
+                                                    </div>
+
+                        <div class="league-cell" title="UFC">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/ufc.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">UFC Freedom 250 Topuria</div>
+
+                                                                    <div class="logo-letter">U</div>
+                                                            </div>
+
+                                                            <div class="vs live">LIVE</div>
+                            
+                            <div class="team away">
+                                                                                                            <div class="logo-letter">G</div>
+                                    
+                                    <div class="team-name">Gaethje</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>111</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                            <span class="stream-number" title="Channel 2">
+                                            <b>112</b>
+                                            <span>CH 2</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="sweden - tunisia sweden tunisia fifa world cup fifa world cup soccer sun, jun 14"
+                        data-title="Sweden - Tunisia"
+                        data-home="Sweden"
+                        data-away="Tunisia"
+                        data-home-logo="https://embedhd.org/images/team-logos/Sweden.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Tunisia.png"
+                        data-start="1781488800"
+                        data-hds="[71,85]">
+
+                        <div class="game-time">
+                            
+                                                            <b>10:00 PM</b>
+                                <span>Sun, Jun 14</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Sweden</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Sweden.png" alt="Sweden" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs live">LIVE</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Tunisia.png" alt="Tunisia" loading="lazy">
+                                    
+                                    <div class="team-name">Tunisia</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>71</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                            <span class="stream-number" title="Channel 2">
+                                            <b>85</b>
+                                            <span>CH 2</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                            </section>
+                    
+            <section class="date-section date-block">
+                <div class="date-head">
+                    <h2>Mon, Jun 15</h2>
+                    <span>17 events</span>
+                </div>
+
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="spain - cape verde spain cape verde fifa world cup fifa world cup soccer mon, jun 15"
+                        data-title="Spain - Cape Verde"
+                        data-home="Spain"
+                        data-away="Cape Verde"
+                        data-home-logo="https://embedhd.org/images/team-logos/Spain.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/CapeVerde.png"
+                        data-start="1781539200"
+                        data-hds="[71,84]">
+
+                        <div class="game-time">
+                            
+                                                            <b>12:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Spain</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Spain.png" alt="Spain" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781539200">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/CapeVerde.png" alt="Cape Verde" loading="lazy">
+                                    
+                                    <div class="team-name">Cape Verde</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>71</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                            <span class="stream-number" title="Channel 2">
+                                            <b>84</b>
+                                            <span>CH 2</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="belgium - egypt belgium egypt fifa world cup fifa world cup soccer mon, jun 15"
+                        data-title="Belgium - Egypt"
+                        data-home="Belgium"
+                        data-away="Egypt"
+                        data-home-logo="https://embedhd.org/images/team-logos/Belgium.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Egypt.png"
+                        data-start="1781550000"
+                        data-hds="[71,84]">
+
+                        <div class="game-time">
+                            
+                                                            <b>03:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Belgium</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Belgium.png" alt="Belgium" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781550000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Egypt.png" alt="Egypt" loading="lazy">
+                                    
+                                    <div class="team-name">Egypt</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>71</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                            <span class="stream-number" title="Channel 2">
+                                            <b>84</b>
+                                            <span>CH 2</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="saudi arabia - uruguay saudi arabia uruguay fifa world cup fifa world cup soccer mon, jun 15"
+                        data-title="Saudi Arabia - Uruguay"
+                        data-home="Saudi Arabia"
+                        data-away="Uruguay"
+                        data-home-logo="https://embedhd.org/images/team-logos/SaudiArabia.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Uruguay.png"
+                        data-start="1781560800"
+                        data-hds="[71,85]">
+
+                        <div class="game-time">
+                            
+                                                            <b>06:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Saudi Arabia</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/SaudiArabia.png" alt="Saudi Arabia" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781560800">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Uruguay.png" alt="Uruguay" loading="lazy">
+                                    
+                                    <div class="team-name">Uruguay</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>71</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                            <span class="stream-number" title="Channel 2">
+                                            <b>85</b>
+                                            <span>CH 2</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="philadelphia phillies - miami marlins philadelphia phillies miami marlins mlb mlb baseball mon, jun 15"
+                        data-title="Philadelphia Phillies - Miami Marlins"
+                        data-home="Philadelphia Phillies"
+                        data-away="Miami Marlins"
+                        data-home-logo="https://embedhd.org/images/team-logos/PhiladelphiaPhillies.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/MiamiMarlins.png"
+                        data-start="1781563200"
+                        data-hds="[620]">
+
+                        <div class="game-time">
+                            
+                                                            <b>06:40 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Philadelphia Phillies</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/PhiladelphiaPhillies.png" alt="Philadelphia Phillies" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781563200">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/MiamiMarlins.png" alt="Miami Marlins" loading="lazy">
+                                    
+                                    <div class="team-name">Miami Marlins</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>620</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="washington nationals - kansas city royals washington nationals kansas city royals mlb mlb baseball mon, jun 15"
+                        data-title="Washington Nationals - Kansas City Royals"
+                        data-home="Washington Nationals"
+                        data-away="Kansas City Royals"
+                        data-home-logo="https://embedhd.org/images/team-logos/WashingtonNationals.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/KansasCityRoyals.png"
+                        data-start="1781563500"
+                        data-hds="[629]">
+
+                        <div class="game-time">
+                            
+                                                            <b>06:45 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Washington Nationals</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/WashingtonNationals.png" alt="Washington Nationals" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781563500">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/KansasCityRoyals.png" alt="Kansas City Royals" loading="lazy">
+                                    
+                                    <div class="team-name">Kansas City Royals</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>629</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="cincinnati reds - new york mets cincinnati reds new york mets mlb mlb baseball mon, jun 15"
+                        data-title="Cincinnati Reds - New York Mets"
+                        data-home="Cincinnati Reds"
+                        data-away="New York Mets"
+                        data-home-logo="https://embedhd.org/images/team-logos/CincinnatiReds.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/NewYorkMets.png"
+                        data-start="1781565000"
+                        data-hds="[606]">
+
+                        <div class="game-time">
+                            
+                                                            <b>07:10 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Cincinnati Reds</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/CincinnatiReds.png" alt="Cincinnati Reds" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781565000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/NewYorkMets.png" alt="New York Mets" loading="lazy">
+                                    
+                                    <div class="team-name">New York Mets</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>606</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="st. louis cardinals - san diego padres st. louis cardinals san diego padres mlb mlb baseball mon, jun 15"
+                        data-title="St. Louis Cardinals - San Diego Padres"
+                        data-home="St. Louis Cardinals"
+                        data-away="San Diego Padres"
+                        data-home-logo="https://embedhd.org/images/team-logos/StLouisCardinals.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/SanDiegoPadres.png"
+                        data-start="1781567100"
+                        data-hds="[625]">
+
+                        <div class="game-time">
+                            
+                                                            <b>07:45 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">St. Louis Cardinals</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/StLouisCardinals.png" alt="St. Louis Cardinals" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781567100">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/SanDiegoPadres.png" alt="San Diego Padres" loading="lazy">
+                                    
+                                    <div class="team-name">San Diego Padres</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>625</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="basketball"
+                        data-search="dallas wings - las vegas aces dallas wings las vegas aces wnba wnba basketball mon, jun 15"
+                        data-title="Dallas Wings - Las Vegas Aces"
+                        data-home="Dallas Wings"
+                        data-away="Las Vegas Aces"
+                        data-home-logo="https://embedhd.org/images/team-logos/DallasWings.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/LasVegasAces.png"
+                        data-start="1781568000"
+                        data-hds="[707]">
+
+                        <div class="game-time">
+                            
+                                                            <b>08:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="WNBA">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Dallas Wings</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/DallasWings.png" alt="Dallas Wings" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781568000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/LasVegasAces.png" alt="Las Vegas Aces" loading="lazy">
+                                    
+                                    <div class="team-name">Las Vegas Aces</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>707</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="basketball"
+                        data-search="minnesota lynx - portland fire minnesota lynx portland fire wnba wnba basketball mon, jun 15"
+                        data-title="Minnesota Lynx - Portland Fire"
+                        data-home="Minnesota Lynx"
+                        data-away="Portland Fire"
+                        data-home-logo="https://embedhd.org/images/team-logos/MinnesotaLynx.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/PortlandFire.png"
+                        data-start="1781568000"
+                        data-hds="[711]">
+
+                        <div class="game-time">
+                            
+                                                            <b>08:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="WNBA">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Minnesota Lynx</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/MinnesotaLynx.png" alt="Minnesota Lynx" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781568000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/PortlandFire.png" alt="Portland Fire" loading="lazy">
+                                    
+                                    <div class="team-name">Portland Fire</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>711</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="chicago cubs - colorado rockies chicago cubs colorado rockies mlb mlb baseball mon, jun 15"
+                        data-title="Chicago Cubs - Colorado Rockies"
+                        data-home="Chicago Cubs"
+                        data-away="Colorado Rockies"
+                        data-home-logo="https://embedhd.org/images/team-logos/ChicagoCubs.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/ColoradoRockies.png"
+                        data-start="1781568300"
+                        data-hds="[604]">
+
+                        <div class="game-time">
+                            
+                                                            <b>08:05 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Chicago Cubs</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/ChicagoCubs.png" alt="Chicago Cubs" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781568300">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/ColoradoRockies.png" alt="Colorado Rockies" loading="lazy">
+                                    
+                                    <div class="team-name">Colorado Rockies</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>604</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="texas rangers - minnesota twins texas rangers minnesota twins mlb mlb baseball mon, jun 15"
+                        data-title="Texas Rangers - Minnesota Twins"
+                        data-home="Texas Rangers"
+                        data-away="Minnesota Twins"
+                        data-home-logo="https://embedhd.org/images/team-logos/TexasRangers.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/MinnesotaTwins.png"
+                        data-start="1781568300"
+                        data-hds="[627]">
+
+                        <div class="game-time">
+                            
+                                                            <b>08:05 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Texas Rangers</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/TexasRangers.png" alt="Texas Rangers" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781568300">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/MinnesotaTwins.png" alt="Minnesota Twins" loading="lazy">
+                                    
+                                    <div class="team-name">Minnesota Twins</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>627</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="houston astros - detroit tigers houston astros detroit tigers mlb mlb baseball mon, jun 15"
+                        data-title="Houston Astros - Detroit Tigers"
+                        data-home="Houston Astros"
+                        data-away="Detroit Tigers"
+                        data-home-logo="https://embedhd.org/images/team-logos/HoustonAstros.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/DetroitTigers.png"
+                        data-start="1781568600"
+                        data-hds="[610]">
+
+                        <div class="game-time">
+                            
+                                                            <b>08:10 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Houston Astros</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/HoustonAstros.png" alt="Houston Astros" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781568600">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/DetroitTigers.png" alt="Detroit Tigers" loading="lazy">
+                                    
+                                    <div class="team-name">Detroit Tigers</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>610</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="iran - new zealand iran new zealand fifa world cup fifa world cup soccer mon, jun 15"
+                        data-title="Iran - New Zealand"
+                        data-home="Iran"
+                        data-away="New Zealand"
+                        data-home-logo=""
+                        data-away-logo="https://embedhd.org/images/team-logos/NewZealand.png"
+                        data-start="1781571600"
+                        data-hds="[71,85]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Iran</div>
+
+                                                                    <div class="logo-letter">I</div>
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781571600">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/NewZealand.png" alt="New Zealand" loading="lazy">
+                                    
+                                    <div class="team-name">New Zealand</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>71</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                            <span class="stream-number" title="Channel 2">
+                                            <b>85</b>
+                                            <span>CH 2</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="arizona diamondbacks - los angeles angels arizona diamondbacks los angeles angels mlb mlb baseball mon, jun 15"
+                        data-title="Arizona Diamondbacks - Los Angeles Angels"
+                        data-home="Arizona Diamondbacks"
+                        data-away="Los Angeles Angels"
+                        data-home-logo="https://embedhd.org/images/team-logos/ArizonaDiamondbacks.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/LosAngelesAngels.png"
+                        data-start="1781574000"
+                        data-hds="[600]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:40 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Arizona Diamondbacks</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/ArizonaDiamondbacks.png" alt="Arizona Diamondbacks" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781574000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/LosAngelesAngels.png" alt="Los Angeles Angels" loading="lazy">
+                                    
+                                    <div class="team-name">Los Angeles Angels</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>600</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="athletics - pittsburgh pirates athletics pittsburgh pirates mlb mlb baseball mon, jun 15"
+                        data-title="Athletics - Pittsburgh Pirates"
+                        data-home="Athletics"
+                        data-away="Pittsburgh Pirates"
+                        data-home-logo="https://embedhd.org/images/team-logos/Athletics.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/PittsburghPirates.png"
+                        data-start="1781574000"
+                        data-hds="[619]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:40 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Athletics</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Athletics.png" alt="Athletics" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781574000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/PittsburghPirates.png" alt="Pittsburgh Pirates" loading="lazy">
+                                    
+                                    <div class="team-name">Pittsburgh Pirates</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>619</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="basketball"
+                        data-search="golden state valkyries - los angeles sparks golden state valkyries los angeles sparks wnba wnba basketball mon, jun 15"
+                        data-title="Golden State Valkyries - Los Angeles Sparks"
+                        data-home="Golden State Valkyries"
+                        data-away="Los Angeles Sparks"
+                        data-home-logo="https://embedhd.org/images/team-logos/GoldenStateValkyries.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/LosAngelesSparks.png"
+                        data-start="1781575200"
+                        data-hds="[708]">
+
+                        <div class="game-time">
+                            
+                                                            <b>10:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="WNBA">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/wnba.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Golden State Valkyries</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/GoldenStateValkyries.png" alt="Golden State Valkyries" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781575200">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/LosAngelesSparks.png" alt="Los Angeles Sparks" loading="lazy">
+                                    
+                                    <div class="team-name">Los Angeles Sparks</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>708</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="baseball"
+                        data-search="los angeles dodgers - tampa bay rays los angeles dodgers tampa bay rays mlb mlb baseball mon, jun 15"
+                        data-title="Los Angeles Dodgers - Tampa Bay Rays"
+                        data-home="Los Angeles Dodgers"
+                        data-away="Tampa Bay Rays"
+                        data-home-logo="https://embedhd.org/images/team-logos/LosAngelesDodgers.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/TampaBayRays.png"
+                        data-start="1781575200"
+                        data-hds="[613]">
+
+                        <div class="game-time">
+                            
+                                                            <b>10:00 PM</b>
+                                <span>Mon, Jun 15</span>
+                                                    </div>
+
+                        <div class="league-cell" title="MLB">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/mlb.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Los Angeles Dodgers</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/LosAngelesDodgers.png" alt="Los Angeles Dodgers" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781575200">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/TampaBayRays.png" alt="Tampa Bay Rays" loading="lazy">
+                                    
+                                    <div class="team-name">Tampa Bay Rays</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>613</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                            </section>
+                    
+            <section class="date-section date-block">
+                <div class="date-head">
+                    <h2>Tue, Jun 16</h2>
+                    <span>3 events</span>
+                </div>
+
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="france - senegal france senegal fifa world cup fifa world cup soccer tue, jun 16"
+                        data-title="France - Senegal"
+                        data-home="France"
+                        data-away="Senegal"
+                        data-home-logo="https://embedhd.org/images/team-logos/France.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Senegal.png"
+                        data-start="1781636400"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>03:00 PM</b>
+                                <span>Tue, Jun 16</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">France</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/France.png" alt="France" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781636400">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Senegal.png" alt="Senegal" loading="lazy">
+                                    
+                                    <div class="team-name">Senegal</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="iraq - norway iraq norway fifa world cup fifa world cup soccer tue, jun 16"
+                        data-title="Iraq - Norway"
+                        data-home="Iraq"
+                        data-away="Norway"
+                        data-home-logo="https://embedhd.org/images/team-logos/Iraq.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Norway.png"
+                        data-start="1781647200"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>06:00 PM</b>
+                                <span>Tue, Jun 16</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Iraq</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Iraq.png" alt="Iraq" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781647200">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Norway.png" alt="Norway" loading="lazy">
+                                    
+                                    <div class="team-name">Norway</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="argentina - algeria argentina algeria fifa world cup fifa world cup soccer tue, jun 16"
+                        data-title="Argentina - Algeria"
+                        data-home="Argentina"
+                        data-away="Algeria"
+                        data-home-logo="https://embedhd.org/images/team-logos/Argentina.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Algeria.png"
+                        data-start="1781658000"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:00 PM</b>
+                                <span>Tue, Jun 16</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Argentina</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Argentina.png" alt="Argentina" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781658000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Algeria.png" alt="Algeria" loading="lazy">
+                                    
+                                    <div class="team-name">Algeria</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                            </section>
+                    
+            <section class="date-section date-block">
+                <div class="date-head">
+                    <h2>Wed, Jun 17</h2>
+                    <span>5 events</span>
+                </div>
+
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="austria - jordan austria jordan fifa world cup fifa world cup soccer wed, jun 17"
+                        data-title="Austria - Jordan"
+                        data-home="Austria"
+                        data-away="Jordan"
+                        data-home-logo="https://embedhd.org/images/team-logos/Austria.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Jordan.png"
+                        data-start="1781668800"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>12:00 AM</b>
+                                <span>Wed, Jun 17</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Austria</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Austria.png" alt="Austria" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781668800">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Jordan.png" alt="Jordan" loading="lazy">
+                                    
+                                    <div class="team-name">Jordan</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="portugal - congo dr portugal congo dr fifa world cup fifa world cup soccer wed, jun 17"
+                        data-title="Portugal - Congo DR"
+                        data-home="Portugal"
+                        data-away="Congo DR"
+                        data-home-logo="https://embedhd.org/images/team-logos/Portugal.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/CongoDR.png"
+                        data-start="1781715600"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>01:00 PM</b>
+                                <span>Wed, Jun 17</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Portugal</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Portugal.png" alt="Portugal" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781715600">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/CongoDR.png" alt="Congo DR" loading="lazy">
+                                    
+                                    <div class="team-name">Congo DR</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="england - croatia england croatia fifa world cup fifa world cup soccer wed, jun 17"
+                        data-title="England - Croatia"
+                        data-home="England"
+                        data-away="Croatia"
+                        data-home-logo="https://embedhd.org/images/team-logos/England.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Croatia.png"
+                        data-start="1781726400"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>04:00 PM</b>
+                                <span>Wed, Jun 17</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">England</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/England.png" alt="England" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781726400">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Croatia.png" alt="Croatia" loading="lazy">
+                                    
+                                    <div class="team-name">Croatia</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="ghana - panama ghana panama fifa world cup fifa world cup soccer wed, jun 17"
+                        data-title="Ghana - Panama"
+                        data-home="Ghana"
+                        data-away="Panama"
+                        data-home-logo="https://embedhd.org/images/team-logos/Ghana.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Panama.png"
+                        data-start="1781737200"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>07:00 PM</b>
+                                <span>Wed, Jun 17</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Ghana</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Ghana.png" alt="Ghana" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781737200">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Panama.png" alt="Panama" loading="lazy">
+                                    
+                                    <div class="team-name">Panama</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="soccer"
+                        data-search="uzbekistan - colombia uzbekistan colombia fifa world cup fifa world cup soccer wed, jun 17"
+                        data-title="Uzbekistan - Colombia"
+                        data-home="Uzbekistan"
+                        data-away="Colombia"
+                        data-home-logo="https://embedhd.org/images/team-logos/Uzbekistan.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/Colombia.png"
+                        data-start="1781748000"
+                        data-hds="[]">
+
+                        <div class="game-time">
+                            
+                                                            <b>10:00 PM</b>
+                                <span>Wed, Jun 17</span>
+                                                    </div>
+
+                        <div class="league-cell" title="FIFA WORLD CUP">
+                                                            <img class="league-logo" src="https://a.espncdn.com/combiner/i?img=/i/leaguelogos/soccer/500/4.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Uzbekistan</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/Uzbekistan.png" alt="Uzbekistan" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1781748000">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/Colombia.png" alt="Colombia" loading="lazy">
+                                    
+                                    <div class="team-name">Colombia</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                    <span class="stream-number">
+                                        <b>-</b>
+                                        <span>HD</span>
+                                    </span>
+                                                            </div>
+
+                            <button class="watch" disabled>
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                            </section>
+                    
+            <section class="date-section date-block">
+                <div class="date-head">
+                    <h2>Fri, Aug 14</h2>
+                    <span>3 events</span>
+                </div>
+
+                                    
+                    <div class="score-row event-row"
+                        data-cat="football"
+                        data-search="atlanta falcons - denver broncos atlanta falcons denver broncos nfl nfl football fri, aug 14"
+                        data-title="Atlanta Falcons - Denver Broncos"
+                        data-home="Atlanta Falcons"
+                        data-away="Denver Broncos"
+                        data-home-logo="https://embedhd.org/images/team-logos/AtlantaFalcons.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/DenverBroncos.png"
+                        data-start="1786755600"
+                        data-hds="[252]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:00 PM</b>
+                                <span>Fri, Aug 14</span>
+                                                    </div>
+
+                        <div class="league-cell" title="NFL">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Atlanta Falcons</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/AtlantaFalcons.png" alt="Atlanta Falcons" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1786755600">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/DenverBroncos.png" alt="Denver Broncos" loading="lazy">
+                                    
+                                    <div class="team-name">Denver Broncos</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>252</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="football"
+                        data-search="new york jets - tampa bay buccaneers new york jets tampa bay buccaneers nfl nfl football fri, aug 14"
+                        data-title="New York Jets - Tampa Bay Buccaneers"
+                        data-home="New York Jets"
+                        data-away="Tampa Bay Buccaneers"
+                        data-home-logo="https://embedhd.org/images/team-logos/NewYorkJets.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/TampaBayBuccaneers.png"
+                        data-start="1786755600"
+                        data-hds="[275]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:00 PM</b>
+                                <span>Fri, Aug 14</span>
+                                                    </div>
+
+                        <div class="league-cell" title="NFL">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">New York Jets</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/NewYorkJets.png" alt="New York Jets" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1786755600">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/TampaBayBuccaneers.png" alt="Tampa Bay Buccaneers" loading="lazy">
+                                    
+                                    <div class="team-name">Tampa Bay Buccaneers</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>275</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                                    
+                    <div class="score-row event-row"
+                        data-cat="football"
+                        data-search="washington commanders - miami dolphins washington commanders miami dolphins nfl nfl football fri, aug 14"
+                        data-title="Washington Commanders - Miami Dolphins"
+                        data-home="Washington Commanders"
+                        data-away="Miami Dolphins"
+                        data-home-logo="https://embedhd.org/images/team-logos/WashingtonCommanders.png"
+                        data-away-logo="https://embedhd.org/images/team-logos/MiamiDolphins.png"
+                        data-start="1786755600"
+                        data-hds="[282]">
+
+                        <div class="game-time">
+                            
+                                                            <b>09:00 PM</b>
+                                <span>Fri, Aug 14</span>
+                                                    </div>
+
+                        <div class="league-cell" title="NFL">
+                                                            <img class="league-logo" src="https://a.espncdn.com/i/teamlogos/leagues/500/nfl.png" alt="" loading="lazy">
+                                                    </div>
+
+                        <div class="matchup">
+                            <div class="team home">
+                                <div class="team-name">Washington Commanders</div>
+
+                                                                    <img class="logo" src="https://embedhd.org/images/team-logos/WashingtonCommanders.png" alt="Washington Commanders" loading="lazy">
+                                                            </div>
+
+                                                            <div class="vs countdown" data-countdown="1786755600">Loading...</div>
+                            
+                            <div class="team away">
+                                                                                                            <img class="logo" src="https://embedhd.org/images/team-logos/MiamiDolphins.png" alt="Miami Dolphins" loading="lazy">
+                                    
+                                    <div class="team-name">Miami Dolphins</div>
+                                                            </div>
+                        </div>
+
+                        <div class="actions">
+                            <div class="event-channels">
+                                                                                                            <span class="stream-number" title="Channel 1">
+                                            <b>282</b>
+                                            <span>CH 1</span>
+                                        </span>
+                                                                                                </div>
+
+                            <button class="watch" >
+                                Watch
+                            </button>
+                        </div>
+                    </div>
+                            </section>
+            
+</main>
+
+<div class="overlay" id="overlay">
+    <div class="modal">
+        <div class="modal-head">
+            <div class="modal-title-teams" id="modalTitle">Event</div>
+            <button class="close" id="closeModal">Close</button>
+        </div>
+
+        <div class="modal-body">
+            <div class="player" id="player"></div>
+
+            <div class="players">
+                <h3>Embeds</h3>
+                <div id="players"></div>
+            </div>
+        </div>
+
+        <div class="iframe-panel">
+            <div class="iframe-head">
+                <strong>iFrame Code</strong>
+                <button class="copy-iframe" id="copyIframeBtn" type="button">Copy iFrame</button>
+            </div>
+
+            <textarea id="iframeCode" readonly></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toast">Copied</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const BASE = "https:\/\/embedhd.org\/source\/fetch.php?hd=";
+
+const rows = document.querySelectorAll('.event-row');
+const search = document.getElementById('search');
+const filters = document.getElementById('filters');
+const blocks = document.querySelectorAll('.date-block');
+
+const overlay = document.getElementById('overlay');
+const modalTitle = document.getElementById('modalTitle');
+const closeModal = document.getElementById('closeModal');
+const player = document.getElementById('player');
+const players = document.getElementById('players');
+const iframeCode = document.getElementById('iframeCode');
+const copyIframeBtn = document.getElementById('copyIframeBtn');
+const toast = document.getElementById('toast');
+
+const showEmailBtn = document.getElementById('showEmailBtn');
+const contactEmail = document.getElementById('contactEmail');
+
+let activeFilter = 'all';
+
+function esc(str){
+    return String(str || '')
+        .replaceAll('&','&amp;')
+        .replaceAll('<','&lt;')
+        .replaceAll('>','&gt;')
+        .replaceAll('"','&quot;')
+        .replaceAll("'","&#039;");
+}
+
+function streamUrl(hd){
+    return BASE + encodeURIComponent(hd);
+}
+
+function iframeHtml(hd){
+    return `<iframe src="${streamUrl(hd)}" allowfullscreen allow="encrypted-media; picture-in-picture; fullscreen"></iframe>`;
+}
+
+function logoTag(src, name){
+    if (src) {
+        return `<img class="modal-logo" src="${esc(src)}" alt="${esc(name)}">`;
+    }
+
+    const letter = String(name || 'T').trim().charAt(0).toUpperCase() || 'T';
+    return `<div class="modal-letter">${esc(letter)}</div>`;
+}
+
+function renderModalTitle(row){
+    const home = row.dataset.home || row.dataset.title || 'Event';
+    const away = row.dataset.away || '';
+    const homeLogo = row.dataset.homeLogo || '';
+    const awayLogo = row.dataset.awayLogo || '';
+
+    if (!away) {
+        modalTitle.innerHTML = `
+            <div class="modal-team">
+                ${logoTag(homeLogo, home)}
+                <span class="modal-team-name">${esc(home)}</span>
+            </div>
+        `;
+        return;
+    }
+
+    modalTitle.innerHTML = `
+        <div class="modal-team">
+            <span class="modal-team-name">${esc(home)}</span>
+            ${logoTag(homeLogo, home)}
+        </div>
+        <span class="modal-vs">VS</span>
+        <div class="modal-team">
+            ${logoTag(awayLogo, away)}
+            <span class="modal-team-name">${esc(away)}</span>
+        </div>
+    `;
+}
+
+function setPlayer(hd){
+    const code = iframeHtml(hd);
+    player.innerHTML = code;
+    iframeCode.value = code;
+}
+
+function showToast(msg){
+    toast.textContent = msg;
+    toast.style.display = 'block';
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+        toast.style.display = 'none';
+    }, 1400);
+}
+
+async function copyText(text){
+    try {
+        await navigator.clipboard.writeText(text);
+        showToast('Copied');
+    } catch(e) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        ta.remove();
+        showToast('Copied');
+    }
+}
+
+function openModal(row){
+    let hds = [];
+
+    try {
+        hds = JSON.parse(row.dataset.hds || '[]');
+    } catch(e) {}
+
+    if (!hds.length) return;
+
+    renderModalTitle(row);
+    players.innerHTML = '';
+
+    hds.forEach((hd, index) => {
+        const btn = document.createElement('button');
+        btn.textContent = 'Channel ' + (index + 1) + ' - HD ' + hd;
+
+        if (index === 0) {
+            btn.classList.add('active');
+        }
+
+        btn.onclick = () => {
+            players.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            setPlayer(hd);
+        };
+
+        players.appendChild(btn);
+    });
+
+    setPlayer(hds[0]);
+    overlay.classList.add('active');
+}
+
+function close(){
+    overlay.classList.remove('active');
+    player.innerHTML = '';
+    players.innerHTML = '';
+    iframeCode.value = '';
+    modalTitle.innerHTML = 'Event';
+}
+
+rows.forEach(row => {
+    const btn = row.querySelector('.watch');
+
+    if (btn && !btn.disabled) {
+        btn.addEventListener('click', () => openModal(row));
+    }
+});
+
+copyIframeBtn.addEventListener('click', () => {
+    if (iframeCode.value.trim() !== '') {
+        copyText(iframeCode.value);
+    }
+});
+
+closeModal.addEventListener('click', close);
+
+overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+        close();
+    }
+});
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+        close();
+    }
+});
+
+filters.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-filter]');
+    if (!btn) return;
+
+    activeFilter = btn.dataset.filter;
+
+    filters.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    applyFilters();
+});
+
+search.addEventListener('input', applyFilters);
+
+if (showEmailBtn && contactEmail) {
+    showEmailBtn.addEventListener('click', () => {
+        contactEmail.style.display = contactEmail.style.display === 'inline-flex' ? 'none' : 'inline-flex';
+    });
+}
+
+function applyFilters(){
+    const q = search.value.trim().toLowerCase();
+
+    rows.forEach(row => {
+        const cat = row.dataset.cat || '';
+        const hay = row.dataset.search || '';
+
+        const okCat = activeFilter === 'all' || activeFilter === cat;
+        const okSearch = !q || hay.includes(q);
+
+        row.style.display = okCat && okSearch ? '' : 'none';
+    });
+
+    blocks.forEach(block => {
+        const visible = [...block.querySelectorAll('.event-row')]
+            .some(row => row.style.display !== 'none');
+
+        block.style.display = visible ? '' : 'none';
+    });
+}
+
+function pad2(n){
+    return String(n).padStart(2, '0');
+}
+
+function updateCountdowns(){
+    const now = Math.floor(Date.now() / 1000);
+
+    document.querySelectorAll('[data-countdown]').forEach(el => {
+        const start = parseInt(el.dataset.countdown || '0', 10);
+        let diff = start - now;
+
+        if (diff <= 0) {
+            el.textContent = 'LIVE';
+            el.classList.add('live');
+            return;
+        }
+
+        const days = Math.floor(diff / 86400);
+        diff = diff % 86400;
+
+        const hours = Math.floor(diff / 3600);
+        diff = diff % 3600;
+
+        const minutes = Math.floor(diff / 60);
+        const seconds = diff % 60;
+
+        if (days > 0) {
+            el.textContent = `${days}d ${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
+        } else {
+            el.textContent = `${pad2(hours)}:${pad2(minutes)}:${pad2(seconds)}`;
+        }
+    });
+}
+
+applyFilters();
+updateCountdowns();
+setInterval(updateCountdowns, 1000);
+</script>
+
+</body>
+</html>
