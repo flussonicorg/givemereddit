@@ -3,6 +3,7 @@ export const runtime = 'edge';
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import ScheduleView from "@/components/ScheduleView";
+import PopunderAd from "@/components/PopunderAd";
 import { fetchSports, fetchSchedule } from "@/lib/api";
 
 export const revalidate = 30;
@@ -23,6 +24,7 @@ export default async function HomePage() {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#f2f3f5] text-[#15171a]">
+      <PopunderAd />
       <SiteHeader />
       <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-6">
         <div className="mb-8">

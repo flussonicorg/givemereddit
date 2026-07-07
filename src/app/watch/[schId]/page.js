@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 import VideoPlayer from "@/components/VideoPlayer";
+import PopunderAd from "@/components/PopunderAd";
 import { fetchSchedule, findEventById, getVisibleStreams } from "@/lib/api";
 
 export const revalidate = 30;
@@ -32,6 +33,7 @@ export default async function WatchPage({ params }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-[#0f172a] text-white font-sans">
+      <PopunderAd />
       <SiteHeader />
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
