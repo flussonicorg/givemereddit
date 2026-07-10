@@ -1,49 +1,81 @@
 "use client";
 
-export default function SportFilter({ sports, activeSportId, onSelect }) {
-  return (
-    <div className="relative">
-      <div className="flex items-center gap-2.5 overflow-x-auto py-2 px-1 scrollbar-none snap-x">
-        {/* All Sports Button */}
-        <button
-          type="button"
-          onClick={() => onSelect(null)}
-          className={`group flex h-[48px] shrink-0 items-center justify-center gap-2 rounded-2xl border px-5 text-[15px] font-extrabold whitespace-nowrap transition-all duration-200 snap-start ${
-            activeSportId === null
-              ? "border-transparent bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-md shadow-slate-900/20 scale-[1.02]"
-              : "border-slate-200/80 bg-white text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:shadow hover:-translate-y-0.5"
-          }`}
-        >
-          <span className="uppercase tracking-wide">ALL SPORTS</span>
-        </button>
+import Link from "next/link";
 
-        {/* Category Buttons */}
+export default function SportFilter({
+  sports,
+  activeSportId,
+  onSelect,
+  openInNewTab = false,
+}) {
+  const totalEvents = sports.reduce(
+    (acc, s) => acc + (Number(s.events) || 0),
+    0
+  );
+
+  const PillWrapper = ({ isAll, id, isActive, children }) => {
+    const className = `inline-flex items-center gap-2 rounded-xl border px-4 py-2.5 text-xs font-black uppercase tracking-wider transition-all duration-200 ${
+      isActive
+        ? "border-cyan-500 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-[0_0_15px_rgba(6,182,212,0.3)] scale-[1.02]"
+        : "border-slate-800 bg-[#0f172a] text-slate-300 hover:border-cyan-500/50 hover:bg-[#152038] hover:text-white"
+    }`;
+
+    if (openInNewTab) {
+      return (
+        <Link
+          href={isAll ? "/category/all" : `/category/${id}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={className}
+        >
+          {children}
+        </Link>
+      );
+    }
+
+    return (
+      <button
+        type="button"
+        onClick={() => onSelect && onSelect(isAll ? null : id)}
+        className={className}
+      >
+        {children}
+      </button>
+    );
+  };
+
+  return (
+    <div className="space-y-3">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xs font-black uppercase tracking-wider text-slate-400">
+          SELECT SPORT CATEGORY {openInNewTab && "(OPENS IN NEW TAB)"}
+        </h2>
+      </div>
+
+      <div className="flex flex-wrap items-center gap-2.5">
+        {/* All Sports Pill */}
+        <PillWrapper isAll={true} isActive={activeSportId === null}>
+          <span>ALL SPORTS</span>
+          <span className="rounded bg-black/30 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+            {totalEvents}
+          </span>
+        </PillWrapper>
+
+        {/* Category Pills */}
         {sports.map((sport, index) => {
           const isActive = activeSportId === sport.sport_id;
           return (
-            <button
+            <PillWrapper
               key={sport.id ?? `${sport.sport_id}-${index}`}
-              type="button"
-              onClick={() => onSelect(sport.sport_id)}
-              className={`group flex h-[48px] shrink-0 items-center justify-center gap-2 rounded-2xl border px-4.5 text-[15px] font-extrabold whitespace-nowrap transition-all duration-200 snap-start ${
-                isActive
-                  ? "border-transparent bg-gradient-to-r from-slate-900 to-slate-800 text-white shadow-md shadow-slate-900/20 scale-[1.02]"
-                  : "border-slate-200/80 bg-white text-slate-700 shadow-sm hover:border-slate-300 hover:bg-slate-50 hover:shadow hover:-translate-y-0.5"
-              }`}
+              isAll={false}
+              id={sport.sport_id}
+              isActive={isActive}
             >
-              <span className="uppercase tracking-wide">{sport.sport_league_name}</span>
-              {sport.events > 0 && (
-                <span
-                  className={`ml-0.5 flex items-center justify-center rounded-full px-2 py-0.5 text-[11px] font-black transition-colors ${
-                    isActive
-                      ? "bg-red-500 text-white shadow-sm"
-                      : "bg-slate-100 text-slate-800 group-hover:bg-red-50 group-hover:text-red-600"
-                  }`}
-                >
-                  {sport.events}
-                </span>
-              )}
-            </button>
+              <span>{sport.sport_league_name}</span>
+              <span className="rounded bg-black/30 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+                {sport.events}
+              </span>
+            </PillWrapper>
           );
         })}
       </div>

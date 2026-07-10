@@ -4,8 +4,12 @@ import { useMemo, useState } from "react";
 import SportFilter from "./SportFilter";
 import EventCard from "./EventCard";
 
-export default function ScheduleView({ sports, scheduleDays }) {
-  const [activeSportId, setActiveSportId] = useState(null);
+export default function ScheduleView({
+  sports,
+  scheduleDays,
+  initialSportId = null,
+}) {
+  const [activeSportId, setActiveSportId] = useState(initialSportId);
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredDays = useMemo(() => {
@@ -13,7 +17,12 @@ export default function ScheduleView({ sports, scheduleDays }) {
       .map((day) => ({
         ...day,
         schedule: (day.schedule || [])
-          .filter((block) => activeSportId === null || block.sport_id === activeSportId)
+          .filter(
+            (block) =>
+              activeSportId === null ||
+              Number(block.sport_id) === Number(activeSportId) ||
+              String(block.sport_id) === String(activeSportId)
+          )
           .map((block) => ({
             ...block,
             league_schedule: (block.league_schedule || []).filter((e) => {
@@ -51,35 +60,15 @@ export default function ScheduleView({ sports, scheduleDays }) {
     return count;
   }, [filteredDays]);
 
-  return (
-    <div className="space-y-6">
-      {/* Centered Searchbar under header */}
-      <div className="mx-auto max-w-2xl">
-        <div className="relative flex items-center">
-          <svg
-            className="absolute left-4 h-5 w-5 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            />
-          </svg>
-          <input
-            type="text"
-            placeholder="Search team, league, channel or event..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="h-[52px] w-full rounded-full border border-gray-300 bg-white pl-12 pr-4 text-[15px] shadow-sm outline-none transition-all focus:border-[#111827] focus:ring-2 focus:ring-[#111827]/20"
-          />
-        </div>
-      </div>
+  const activeCategoryName = useMemo(() => {
+    if (activeSportId === null) return "ALL SPORTS";
+    const found = sports.find((s) => s.sport_id === activeSportId);
+    return found ? found.sport_league_name.toUpperCase() : "SELECTED SPORT";
+  }, [activeSportId, sports]);
 
-      {/* All Sports Categories */}
+  return (
+    <div className="space-y-8">
+      {/* Category Boxes Section */}
       <div className="w-full">
         <SportFilter
           sports={sports}
@@ -88,23 +77,59 @@ export default function ScheduleView({ sports, scheduleDays }) {
         />
       </div>
 
-      <p className="text-sm text-zinc-500">
-        {totalEvents} event{totalEvents !== 1 ? "s" : ""} scheduled
-      </p>
+      {/* Events Row List Header & Search */}
+      <div className="rounded-2xl border border-slate-800/90 bg-[#111724] p-5 shadow-lg">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="text-lg font-black uppercase tracking-wide text-white">
+              {activeCategoryName} MATCH SCHEDULE
+            </h3>
+            <p className="text-xs text-slate-400">
+              Showing {totalEvents} event{totalEvents !== 1 ? "s" : ""} in list row format
+            </p>
+          </div>
 
+          <div className="w-full sm:w-80">
+            <div className="relative flex items-center">
+              <svg
+                className="absolute left-3.5 h-4 w-4 text-slate-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
+              </svg>
+              <input
+                type="text"
+                placeholder="Search team or league..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-10 w-full rounded-xl border border-slate-700 bg-slate-900 pl-10 pr-4 text-sm text-white placeholder-slate-500 outline-none transition-all focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Events List Rows */}
       {filteredDays.length === 0 ? (
-        <p className="rounded-xl border border-[#d9dde4] bg-white p-8 text-center text-[#667085]">
-          No events for this sport right now.
-        </p>
+        <div className="rounded-2xl border border-slate-800 bg-[#0c1222] p-10 text-center text-slate-400">
+          No scheduled events found for {activeCategoryName}.
+        </div>
       ) : (
         filteredDays.map((day) => (
-          <section key={day.date} className="mb-6 space-y-3">
-            <div className="flex items-center justify-between gap-3 rounded-[5px] bg-[#111827] px-3.5 py-2.5 text-white">
-              <h2 className="m-0 overflow-hidden text-ellipsis whitespace-nowrap text-[15px] uppercase tracking-[.04em]">
-                {day.date}
+          <section key={day.date} className="space-y-3">
+            <div className="flex items-center justify-between rounded-xl border border-slate-800/80 bg-gradient-to-r from-[#0e172d] to-[#0a1122] px-4 py-3 text-white shadow">
+              <h2 className="text-sm font-black uppercase tracking-wider text-cyan-400">
+                📅 {day.date}
               </h2>
             </div>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2.5">
               {day.schedule.map((sportBlock) => (
                 <div key={`${day.date}-${sportBlock.sport_id}`} className="contents">
                   {sportBlock.league_schedule.map((event) => (

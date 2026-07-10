@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 
 export const metadata = {
   title: {
-    default: "SportsHub24 Match Schedule & Live Events",
-    template: "%s | SportsHub24",
+    default: "GiveMeReddit Match Schedule & Live Streams",
+    template: "%s | GiveMeReddit",
   },
   description: "Stay updated with today's live match schedule across football, cricket, NBA, NHL, MLB, UFC, boxing, motorsports, and other major sporting events.",
 };
